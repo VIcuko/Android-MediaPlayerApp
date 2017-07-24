@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 mediaPlayer.start();
-
                 seekbar.setProgress((int)startTime);
                 myHandler.postDelayed(UpdateSongTime,100);
+                Toast.makeText(MainActivity.this,"Play",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.pause();
                 rewind.setEnabled(false);
                 forward.setEnabled(false);
+                Toast.makeText(MainActivity.this,"Pause",Toast.LENGTH_SHORT).show();
             }
         });
 //
