@@ -2,50 +2,86 @@ package com.example.android.mediaplayerapp;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MediaPlayer mediaPlayer;
+    private SeekBar seekbar;
+
+    private double startTime;
+    private double finalTime;
+
+    private Handler myHandler = new Handler();
+
+    private Button rewind;
+    private Button play;
+    private Button pause;
+    private Button forward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer mediapPlayer = MediaPlayer.create(this, R.raw.song);
+        mediaPlayer = MediaPlayer.create(this, R.raw.song);
+        seekbar = (SeekBar)findViewById(R.id.seekBar);
 
-        Button rewind = (Button) findViewById(R.id.rewind);
-        Button play = (Button) findViewById(R.id.rewind);
-        Button pause = (Button) findViewById(R.id.rewind);
-        Button forward = (Button) findViewById(R.id.rewind);
+        startTime = mediaPlayer.getCurrentPosition();
+        finalTime = mediaPlayer.getDuration();
 
-        rewind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        seekbar.setClickable(false);
+        rewind = (Button) findViewById(R.id.rewind);
+        play = (Button) findViewById(R.id.play);
+        pause = (Button) findViewById(R.id.pause);
+        forward = (Button) findViewById(R.id.forward);
 
-            }
-        });
+//        rewind.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mediaPlayer.start();
+//            }
+//        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                mediaPlayer.start();
+
+                seekbar.setProgress((int)startTime);
+                myHandler.postDelayed(UpdateSongTime,100);
             }
         });
 
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mediaPlayer.pause();
+                rewind.setEnabled(false);
+                forward.setEnabled(false);
             }
         });
+//
+//        forward.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                  int currentPosition = mediaPlayer.getCurrentPosition();
+//                  mediaPlayer.
+//            }
+//        });
 
-        forward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
+
+    private Runnable UpdateSongTime = new Runnable() {
+        public void run() {
+            startTime = mediaPlayer.getCurrentPosition();
+            seekbar.setProgress((int)startTime);
+            myHandler.postDelayed(this, 100);
+        }
+    };
 }
