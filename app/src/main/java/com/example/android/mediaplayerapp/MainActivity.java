@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        Toast.makeText(MainActivity.this, "I'm done!", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 seekbar.setProgress((int)startTime);
                 myHandler.postDelayed(UpdateSongTime,100);
                 Toast.makeText(MainActivity.this,"Play",Toast.LENGTH_SHORT).show();
